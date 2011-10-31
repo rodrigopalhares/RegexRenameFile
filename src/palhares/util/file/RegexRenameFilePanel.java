@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
  * Aplicação swing que permite renomear arquivos usando o regex do java.
  * @author Palhares
  */
-public class RegexRenameFile extends JPanel {
+public class RegexRenameFilePanel extends JPanel {
     private static final long serialVersionUID = 6806238886135776531L;
 
     private JTextField regexField;
@@ -39,7 +39,7 @@ public class RegexRenameFile extends JPanel {
     private File[] fileSelected;
     private List<File[]> rollbackFile = new ArrayList<File[]>(); 
 
-    public RegexRenameFile() {
+    public RegexRenameFilePanel() {
         super(new BorderLayout());
 
         this.previewData = new DefaultTableModel(new String[]{"Antes", "Depois"}, 0);
@@ -215,7 +215,7 @@ public class RegexRenameFile extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
-        RegexRenameFile newContentPane = new RegexRenameFile();
+        RegexRenameFilePanel newContentPane = new RegexRenameFilePanel();
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 
