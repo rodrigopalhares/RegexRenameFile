@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="RegexRenameFile.jar"/>
+    <jar path="RegexRenameFile/RegexRenameFile.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/RegexRenameFile/manifest.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>

@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -34,10 +36,12 @@ public class RegexRenameFilePanel extends JPanel {
 	private DefaultTableModel previewData;
 	private JButton renameButton;
 	private JButton openButton;
+	private JButton expandFoldersButton;
 	private JButton rollbackButton;
 	private JFileChooser fileChooser = new JFileChooser();
 
 	private RegexRenameFile regexRenameFile = null;
+
 
 	public RegexRenameFilePanel() {
 		super(new BorderLayout());
@@ -59,6 +63,15 @@ public class RegexRenameFilePanel extends JPanel {
 			}
 		});
 
+		this.expandFoldersButton = new JButton("Expand Folder");
+		this.expandFoldersButton.setEnabled(false);
+		this.expandFoldersButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				expandFolders();
+			}
+		});
+
 		this.rollbackButton = new JButton("Rollback");
 		this.rollbackButton.setEnabled(false);
 		this.rollbackButton.addActionListener(new ActionListener() {
@@ -77,7 +90,7 @@ public class RegexRenameFilePanel extends JPanel {
 			}
 		});
 
-		JPanel panel = new JPanel(new GridLayout(2, 3));
+		JPanel panel = new JPanel(new GridLayout(2, 4));
 		this.regexField = new JTextField();
 		this.regexField.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evt) {
@@ -99,13 +112,37 @@ public class RegexRenameFilePanel extends JPanel {
 		panel.add(new JLabel("Pattern: ", SwingConstants.RIGHT));
 		panel.add(this.regexField);
 		panel.add(this.replacementField);
-		panel.add(this.openButton);
-		panel.add(this.rollbackButton);
 		panel.add(this.renameButton);
+		panel.add(this.openButton);
+		panel.add(this.expandFoldersButton);
+		panel.add(this.rollbackButton);
 		panel.setPreferredSize(new Dimension(0, 50));
 		this.add(panel, BorderLayout.PAGE_END);
 
 		this.updatePreview();
+	}
+
+	/**
+	 * Expande as pastas na lista recursivamente.
+	 */
+	private void expandFolders() {
+		File[] files = this.regexRenameFile.getFiles();
+		List<File> expandFolders = this.expandFolders(files);
+		this.regexRenameFile = new RegexRenameFile(expandFolders.toArray(new File[0]));
+		updatePreview();
+	}
+
+	private List<File> expandFolders(File[] files) {
+		List<File> fileList = new ArrayList<File>();
+		for (File currentFile : files) {
+			if (currentFile.isFile()) {
+				fileList.add(currentFile);
+			} else {
+				fileList.addAll(this.expandFolders(currentFile.listFiles()));
+			}
+		}
+
+		return fileList;
 	}
 
 	/**
@@ -119,6 +156,7 @@ public class RegexRenameFilePanel extends JPanel {
 			updatePreview();
 			this.rollbackButton.setEnabled(false);
 			this.renameButton.setEnabled(true);
+			this.expandFoldersButton.setEnabled(true);
 		}
 	}
 
